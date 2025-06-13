@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signup } from '~/auth/passkey-helpers';
+import { login, signup } from '~/auth/passkey-helpers';
 import Button from '../button';
 
 type LoginFormProps = {};
@@ -8,6 +8,7 @@ const LoginForm = ({}: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState<{ email?: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const validateEmail = (email: string): string | null => {
     if (!email.trim()) {
@@ -62,9 +63,13 @@ const LoginForm = ({}: LoginFormProps) => {
     setIsSubmitting(true);
 
     try {
-      // Add your login logic here
-      console.log('Login with:', email);
-      // Handle successful login
+      const result = await login(email);
+      console.log('Login result:', result);
+      if (result.status === 'success') {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
     } catch (error) {
       // Handle login error
       setErrors({ email: 'Login failed. Please try again.' });
@@ -109,6 +114,15 @@ const LoginForm = ({}: LoginFormProps) => {
       <Button onClick={handleLogin} disabled={isSubmitting}>
         {isSubmitting ? 'Logging In...' : 'Log In'}
       </Button>
+
+      {status === 'success' && (
+        <span className="text-green-500">Logged in successfully!</span>
+      )}
+      {status === 'error' && (
+        <span className="text-red-500">
+          An error occurred. Please try again.
+        </span>
+      )}
     </form>
   );
 };
