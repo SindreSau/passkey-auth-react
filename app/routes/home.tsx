@@ -14,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="container mx-auto mt-16">
+    <div className="container mx-auto mt-16 px-3">
       <LoginForm />
     </div>
   );

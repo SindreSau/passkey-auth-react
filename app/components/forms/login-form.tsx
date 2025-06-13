@@ -79,7 +79,7 @@ const LoginForm = ({}: LoginFormProps) => {
   };
 
   return (
-    <form className="flex flex-col gap-4 border p-4 rounded max-w-fit mx-auto">
+    <form className="flex flex-col gap-4 border p-4 rounded mx-auto min-w-fit @container max-w-xl">
       <h2>Login</h2>
 
       <div className="flex flex-col gap-1">
@@ -90,15 +90,12 @@ const LoginForm = ({}: LoginFormProps) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={() => {
-            // Validate on blur for better UX
             const emailError = validateEmail(email);
             setErrors({ email: emailError || undefined });
           }}
           required
-          className={`border px-2 py-1 rounded min-w-[400px] ${
-            errors.email
-              ? 'border-red-500 focus:border-red-500'
-              : 'border-gray-300'
+          className={`border px-2 py-1 rounded min-w-[300px] ${
+            errors.email ? 'border-red-500 focus:border-red-500' : ''
           }`}
           disabled={isSubmitting}
         />
@@ -107,13 +104,15 @@ const LoginForm = ({}: LoginFormProps) => {
         )}
       </div>
 
-      <Button onClick={handleSignUp} disabled={isSubmitting}>
-        {isSubmitting ? 'Signing Up...' : 'Sign Up'}
-      </Button>
+      <div className="flex gap-2 @md:flex-row flex-col">
+        <Button onClick={handleSignUp} disabled={isSubmitting}>
+          {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+        </Button>
 
-      <Button onClick={handleLogin} disabled={isSubmitting}>
-        {isSubmitting ? 'Logging In...' : 'Log In'}
-      </Button>
+        <Button onClick={handleLogin} disabled={isSubmitting}>
+          {isSubmitting ? 'Logging In...' : 'Log In'}
+        </Button>
+      </div>
 
       {status === 'success' && (
         <span className="text-green-500">Logged in successfully!</span>
